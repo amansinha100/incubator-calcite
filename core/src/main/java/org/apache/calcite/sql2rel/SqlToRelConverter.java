@@ -776,23 +776,12 @@ public class SqlToRelConverter {
     // If extra expressions were added to the project list for sorting,
     // add another project to remove them.
     if (orderExprList.size() > 0) {
-      List<RexNode> exprs = new ArrayList<RexNode>();
       final RelDataType rowType = bb.root.getRowType();
       final int fieldCount =
           rowType.getFieldCount() - orderExprList.size();
-      for (int i = 0; i < fieldCount; i++) {
-        exprs.add(rexBuilder.makeInputRef(bb.root, i));
-      }
-      bb.setRoot(
-          new LogicalProject(
-              cluster,
-              cluster.traitSetOf(RelCollationImpl.PRESERVE),
-              bb.root,
-              exprs,
-              cluster.getTypeFactory().createStructType(
-                  rowType.getFieldList().subList(0, fieldCount)),
-              Project.Flags.BOXED),
-          false);
+      RelNode newProject =
+          RelOptUtil.createProject(bb.root, Util.range(fieldCount));
+      bb.setRoot(newProject, false);
     }
   }
 
@@ -2239,7 +2228,7 @@ public class SqlToRelConverter {
                   + rightCount + extraRightExprs.size(),
               0, 0, leftCount,
               leftCount, leftCount + extraLeftExprs.size(), rightCount);
-      return RelOptUtil.project(join, mapping);
+      return RelOptUtil.createProject(join, mapping);
     }
     return join;
   }

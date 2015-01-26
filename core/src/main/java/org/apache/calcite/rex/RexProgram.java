@@ -580,7 +580,7 @@ public class RexProgram {
         targets[source] = i;
       }
     }
-  loop:
+
     for (RelCollation collation : inputCollations) {
       final ArrayList<RelFieldCollation> fieldCollations =
           new ArrayList<RelFieldCollation>(0);
@@ -588,14 +588,19 @@ public class RexProgram {
         final int source = fieldCollation.getFieldIndex();
         final int target = targets[source];
         if (target < 0) {
-          continue loop;
+          // Break when first non-present-in-target field is detected
+          // For instance, if (order by x, y, z) and y is not present in
+          // output, then the output is sorted by x only
+          break;
         }
         fieldCollations.add(
             fieldCollation.copy(target));
       }
+      if (fieldCollations.isEmpty()) {
+        continue;
+      }
 
-      // Success -- all of the source fields of this key are mapped
-      // to the output.
+      // Success -- at least a single field is ordered
       outputCollations.add(RelCollationImpl.of(fieldCollations));
     }
   }

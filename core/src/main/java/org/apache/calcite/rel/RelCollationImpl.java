@@ -67,10 +67,16 @@ public class RelCollationImpl implements RelCollation {
   }
 
   public static RelCollation of(RelFieldCollation... fieldCollations) {
+    if (fieldCollations.length == 0) {
+      return EMPTY;
+    }
     return new RelCollationImpl(ImmutableList.copyOf(fieldCollations));
   }
 
   public static RelCollation of(List<RelFieldCollation> fieldCollations) {
+    if (fieldCollations.isEmpty()) {
+      return EMPTY;
+    }
     return new RelCollationImpl(ImmutableList.copyOf(fieldCollations));
   }
 

@@ -910,6 +910,42 @@ public class PlannerTest {
       return super.deriveType(validator, scope, call);
     }
   }
+
+  @Test  // CALCITE-569
+  public void testOrderByNonSelectColumn() throws Exception {
+    final SchemaPlus schema = Frameworks.createRootSchema(true).add("tpch",
+      new ReflectiveSchema(new TpchSchema()));
+
+    String query = "select t.psPartkey from \n"
+      + "(select ps.psPartkey from `tpch`.`partsupp` ps \n"
+      + "order by ps.psPartkey, ps.psSupplyCost) t \n"
+      + "order by t.psPartkey";
+
+    String expectedPlan =
+        "LogicalProject(psPartkey=[$0])\n"
+        + "   LogicalProject(psPartkey=[$0])\n"
+        + "     Sort(sort0=[$0], sort1=[$1], dir0=[ASC], dir1=[ASC])\n"
+        + "       LogicalProject(psPartkey=[$0], psSupplyCost=[$1])\n"
+        + "         EnumerableTableScan(table=[[tpch, partsupp]])";
+
+    List<RelTraitDef> traitDefs = new ArrayList<RelTraitDef>();
+    traitDefs.add(ConventionTraitDef.INSTANCE);
+    traitDefs.add(RelCollationTraitDef.INSTANCE);
+    Planner p = Frameworks.getPlanner(Frameworks
+        .newConfigBuilder() //
+        .parserConfig(
+            SqlParser.configBuilder().setLex(Lex.MYSQL).build()) //
+            .defaultSchema(schema) //
+            .traitDefs(traitDefs) //
+            .programs(Programs.ofRules(Programs.RULE_SET)) //
+            .build());
+    SqlNode n = p.parse(query);
+    n = p.validate(n);
+    RelNode r = p.convert(n);
+    String plan = RelOptUtil.toString(r);
+    p.close();
+    assertThat(plan, containsString(expectedPlan));
+  }
 }
 
 // End PlannerTest.java
