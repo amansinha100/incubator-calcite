@@ -775,6 +775,8 @@ public class SqlToRelConverter {
 
     // If extra expressions were added to the project list for sorting,
     // add another project to remove them.
+    // Since the project is not projecting the expressions that were
+    // used for sorting, the output collation trait is EMPTY.
     if (orderExprList.size() > 0) {
       List<RexNode> exprs = new ArrayList<RexNode>();
       final RelDataType rowType = bb.root.getRowType();
@@ -786,7 +788,7 @@ public class SqlToRelConverter {
       bb.setRoot(
           new LogicalProject(
               cluster,
-              cluster.traitSetOf(RelCollationImpl.PRESERVE),
+              cluster.traitSetOf(RelCollationImpl.EMPTY),
               bb.root,
               exprs,
               cluster.getTypeFactory().createStructType(
