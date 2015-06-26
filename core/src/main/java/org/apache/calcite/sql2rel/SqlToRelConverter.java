@@ -98,6 +98,7 @@ import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlNumericLiteral;
 import org.apache.calcite.sql.SqlOperator;
 import org.apache.calcite.sql.SqlOperatorTable;
+import org.apache.calcite.sql.SqlOverOperator;
 import org.apache.calcite.sql.SqlSampleSpec;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.SqlSelectKeyword;
@@ -4298,6 +4299,9 @@ public class SqlToRelConverter {
     }
 
     public Void visit(SqlCall call) {
+      if (call.getOperator() instanceof SqlOverOperator) {
+        return null;
+      }
       if (call.getOperator().isAggregator()) {
         assert bb.agg == this;
         List<Integer> args = new ArrayList<Integer>();
@@ -4730,6 +4734,9 @@ public class SqlToRelConverter {
     final SqlNodeList list = new SqlNodeList(SqlParserPos.ZERO);
 
     @Override public Void visit(SqlCall call) {
+      if (call.getOperator() instanceof SqlOverOperator) {
+        return null;
+      }
       if (call.getOperator().isAggregator()) {
         list.add(call);
         return null;
