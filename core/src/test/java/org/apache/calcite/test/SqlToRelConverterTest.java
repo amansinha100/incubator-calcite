@@ -925,6 +925,7 @@ public class SqlToRelConverterTest extends SqlToRelTestBase {
         "${plan}");
   }
 
+  @Ignore
   @Test public void testOverMultiple() {
     check(
         "select sum(sal) over w1,\n"
@@ -961,6 +962,7 @@ public class SqlToRelConverterTest extends SqlToRelTestBase {
         "${plan}");
   }
 
+  @Ignore
   @Test public void testOverAvg() {
     // AVG(x) gets translated to SUM(x)/COUNT(x).  Because COUNT controls
     // the return type there usually needs to be a final CAST to get the
@@ -973,6 +975,7 @@ public class SqlToRelConverterTest extends SqlToRelTestBase {
         "${plan}");
   }
 
+  @Ignore
   @Test public void testOverAvg2() {
     // Check to see if extra CAST is present.  Because CAST is nested
     // inside AVG it passed to both SUM and COUNT so the outer final CAST
@@ -1333,6 +1336,17 @@ public class SqlToRelConverterTest extends SqlToRelTestBase {
         + " inner join emp on T.x = emp.deptno \n"
         + " and T.y = emp.empno \n",
         "${plan}");
+  }
+
+  @Ignore
+  @Test public void test1() {
+  check("select wsum from (select sum(sal) over (partition by deptno) as wsum from emp) where wsum is not null", "${plan}");
+ //  check("select wsum from (select min(sal) over (partition by deptno) as wsum from emp) where wsum is not null", "${plan}");
+ //   check("select wsum from (select deptno as wsum from emp where deptno is null group by deptno) where wsum is not null", "${plan}");
+    // check("select deptno from emp where deptno is not null", "${plan}");
+    // check("select mysal from (select e.sal as mysal from dept d left outer join emp e on d.deptno = e.deptno) where mysal is not null", "${plan}");
+    // check("select x from (select sal as x from emp where sal is null) where x is not null", "${plan}");
+    // check("select sal as x from emp where sal is null and sal is not null", "${plan}");
   }
 
   /**

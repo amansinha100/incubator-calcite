@@ -3419,6 +3419,7 @@ public class JdbcTest {
   }
 
   /** Tests windowed aggregation. */
+  @Ignore
   @Test public void testWinAgg() {
     CalciteAssert.hr()
         .query("select"
