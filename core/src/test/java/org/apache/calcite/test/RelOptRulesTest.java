@@ -4232,6 +4232,19 @@ public class RelOptRulesTest extends RelOptTestBase {
     checkPlanning(program, sql);
   }
 
+  @Test public void testProjectJoinTransposeItem() {
+    ProjectJoinTransposeRule projectJoinTransposeRule =
+        new ProjectJoinTransposeRule(skipItem, RelFactories.LOGICAL_BUILDER);
+
+    String query = "select t1.c_nationkey[0], t2.c_nationkey[0] "
+        + "from SALES.CUSTOMER as t1 left outer join SALES.CUSTOMER as t2 "
+        + "on t1.c_nationkey[0] = t2.c_nationkey[0]";
+
+    checkPlanningDynamic(
+        projectJoinTransposeRule,
+        query);
+  }
+
 }
 
 // End RelOptRulesTest.java

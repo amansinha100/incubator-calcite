@@ -303,7 +303,7 @@ public class ElasticsearchFilter extends Filter implements ElasticsearchRel {
         return true;
       case CAST:
         return translateBinary2(op, ((RexCall) left).operands.get(0), right);
-      case OTHER_FUNCTION:
+      case ITEM:
         String itemName = ElasticsearchRules.isItem((RexCall) left);
         if (itemName != null) {
           translateOp2(op, itemName, rightLiteral);
