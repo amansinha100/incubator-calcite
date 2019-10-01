@@ -172,6 +172,9 @@ public enum SqlKind {
   /** Item in WITH clause. */
   WITH_ITEM,
 
+  /** Item expression */
+  ITEM,
+
   /**
    * Union
    */
