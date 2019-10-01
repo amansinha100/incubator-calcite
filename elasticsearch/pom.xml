@@ -26,7 +26,7 @@ limitations under the License.
 
   <artifactId>calcite-elasticsearch</artifactId>
   <packaging>jar</packaging>
-  <version>1.18.0-drill-r2</version>
+  <version>1.18.0-drill-r3-test</version>
   <name>Calcite Elasticsearch</name>
   <description>Elasticsearch adapter for Calcite</description>
 

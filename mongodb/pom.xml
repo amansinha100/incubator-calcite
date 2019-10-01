@@ -25,7 +25,7 @@ limitations under the License.
 
   <artifactId>calcite-mongodb</artifactId>
   <packaging>jar</packaging>
-  <version>1.18.0-drill-r2</version>
+  <version>1.18.0-drill-r3-test</version>
   <name>Calcite MongoDB</name>
   <description>MongoDB adapter for Calcite</description>
 

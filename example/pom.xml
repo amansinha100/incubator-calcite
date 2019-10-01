@@ -26,7 +26,7 @@ limitations under the License.
   <!-- The basics. -->
   <artifactId>calcite-example</artifactId>
   <packaging>pom</packaging>
-  <version>1.18.0-drill-r2</version>
+  <version>1.18.0-drill-r3-test</version>
   <name>Calcite Examples</name>
   <description>Calcite examples</description>
 

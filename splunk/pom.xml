@@ -25,7 +25,7 @@ limitations under the License.
 
   <artifactId>calcite-splunk</artifactId>
   <packaging>jar</packaging>
-  <version>1.18.0-drill-r2</version>
+  <version>1.18.0-drill-r3-test</version>
   <name>Calcite Splunk</name>
   <description>Splunk adapter for Calcite; also a JDBC driver for Splunk</description>
 

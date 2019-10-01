@@ -25,7 +25,7 @@ limitations under the License.
   <!-- The basics. -->
   <artifactId>calcite-file</artifactId>
   <packaging>jar</packaging>
-  <version>1.18.0-drill-r2</version>
+  <version>1.18.0-drill-r3-test</version>
   <name>Calcite File</name>
   <description>Calcite provider that reads files and URIs</description>
 
